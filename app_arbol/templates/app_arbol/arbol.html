@@ -1,0 +1,44 @@
+{% extends 'app_arbol/base.html' %}
+{% block titulo %}{{ contexto.nombre }}{% endblock %}
+{% block contenido %}
+<div class="breadcrumb">
+    <a href="{% url 'vista_index' %}">Inicio</a>
+    <span class="separador">/</span>
+    <a href="{% url 'vista_contextos' %}">Contextos</a>
+    <span class="separador">/</span>
+    <span class="actual">{{ contexto.nombre }}</span>
+</div>
+
+<div class="page-heading">
+    <h1>{{ contexto.icono }} {{ contexto.nombre }}</h1>
+    <p>{{ contexto.descripcion|default:"Arbol jerarquico de este contexto." }}</p>
+    <div class="acciones">
+        <a href="{% url 'vista_crear_nodo' %}?contexto={{ contexto.id }}" class="btn btn-success">+ Nuevo nodo raiz</a>
+        <a href="{% url 'vista_contextos' %}" class="btn btn-outline">Todos los contextos</a>
+    </div>
+</div>
+
+{% if arbol_plano %}
+<div class="tree-container">
+    {% for nodo, nivel in arbol_plano %}
+    <div class="tree-nodo" style="padding-left: {{ nivel|add:1 }}rem;">
+        <a href="{% url 'vista_nodo' nodo.id %}" class="tree-nodo-contenido">
+            {% if nodo.es_hoja %}
+            <span class="nodo-icono">&#x1F4C4;</span>
+            {% else %}
+            <span class="nodo-icono">&#x1F4C2;</span>
+            {% endif %}
+            {{ nodo.nombre }}
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <div class="icono-grande">&#x1F331;</div>
+    <h3>Este contexto esta vacio</h3>
+    <p>No hay nodos registrados en {{ contexto.nombre }}. Cree un nuevo nodo raiz para comenzar.</p>
+    <a href="{% url 'vista_crear_nodo' %}?contexto={{ contexto.id }}" class="btn btn-success" style="margin-top: 1rem;">Crear nodo raiz</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'app_arbol/base.html' %}
+{% block titulo %}Crear Nodo{% endblock %}
+{% block contenido %}
+<div class="breadcrumb">
+    <a href="{% url 'vista_index' %}">Inicio</a>
+    <span class="separador">/</span>
+    <span class="actual">Crear nodo</span>
+</div>
+
+<div class="page-heading">
+    <h1>+ Crear nuevo nodo</h1>
+    <p>Agregue un nodo al arbol jerarquico seleccionando el contexto y padre correspondiente.</p>
+</div>
+
+<div class="form-card">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-grupo">
+            <label for="contexto">Contexto</label>
+            <select name="contexto" id="contexto" required onchange="window.location.href='?contexto='+this.value">
+                <option value="">Seleccione un contexto</option>
+                {% for ctx in contextos %}
+                <option value="{{ ctx.id }}" {% if contexto_seleccionado and ctx.id == contexto_seleccionado.id %}selected{% endif %}>
+                    {{ ctx.icono }} {{ ctx.nombre }}
+                </option>
+                {% endfor %}
+            </select>
+            <div class="ayuda">Seleccione primero el contexto para ver los nodos disponibles como padre.</div>
+        </div>
+
+        {% if contexto_seleccionado %}
+        <div class="form-grupo">
+            <label for="padre">Nodo padre <small>(opcional)</small></label>
+            <select name="padre" id="padre">
+                <option value="">— Es nodo raiz —</option>
+                {% for nodo in nodos_disponibles %}
+                <option value="{{ nodo.id }}" {% if padre_seleccionado and nodo.id == padre_seleccionado.id %}selected{% endif %}>
+                    {{ '--'|stringformat:'s'|center:nodo.nivel|cut:' ' }}{{ nodo.nombre }}
+                </option>
+                {% endfor %}
+            </select>
+            {% if padre_seleccionado %}
+            <div class="ayuda">El nodo se creara como hijo de <strong>{{ padre_seleccionado.nombre }}</strong> (nivel {{ padre_seleccionado.nivel|add:1 }}).</div>
+            {% endif %}
+        </div>
+
+        <div class="form-grupo">
+            <label for="nombre">Nombre del nodo</label>
+            <input type="text" name="nombre" id="nombre" placeholder="Ej: Soporte nivel 1" required>
+        </div>
+
+        <div class="form-grupo">
+            <label for="descripcion">Descripcion</label>
+            <textarea name="descripcion" id="descripcion" placeholder="Describa la funcion o proposito de este nodo..."></textarea>
+        </div>
+
+        <div class="form-grupo">
+            <label for="orden">Orden</label>
+            <input type="number" name="orden" id="orden" value="0" min="0">
+            <div class="ayuda">Numero de orden para mostrar (menor = primero).</div>
+        </div>
+
+        <div class="form-acciones">
+            <button type="submit" class="btn btn-success">Guardar nodo</button>
+            <a href="{% url 'vista_index' %}" class="btn btn-outline">Cancelar</a>
+        </div>
+        {% endif %}
+    </form>
+</div>
+{% endblock %}

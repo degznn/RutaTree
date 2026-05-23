@@ -1,0 +1,48 @@
+{% extends 'app_arbol/base.html' %}
+{% load static %}
+{% block titulo %}Inicio{% endblock %}
+{% block contenido %}
+<div class="page-heading">
+    <h1>Panel de Control</h1>
+    <p>Organiza y visualiza las rutas de atención y gestión institucional mediante un árbol jerárquico.</p>
+</div>
+
+{% if contextos %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-numero">{{ contextos|length }}</div>
+        <div class="stat-label">Contextos</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-numero">{{ total_nodos }}</div>
+        <div class="stat-label">Nodos totales</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-numero">{{ total_raices }}</div>
+        <div class="stat-label">Ramas principales</div>
+    </div>
+</div>
+
+<h2 style="margin-bottom: 1rem; font-size: 1.3rem;">Contextos disponibles</h2>
+<div class="card-grid">
+    {% for contexto in contextos %}
+    <div class="card">
+        <div class="card-icon">{{ contexto.icono }}</div>
+        <h3><a href="{% url 'vista_arbol' contexto.id %}">{{ contexto.nombre }}</a></h3>
+        <p>{{ contexto.descripcion|default:"Sin descripción"|truncatechars:100 }}</p>
+        <div class="card-meta">
+            <span>📦 {{ contexto.cantidad_nodos }} nodos</span>
+            <span><a href="{% url 'vista_arbol' contexto.id %}">Ver árbol →</a></span>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <div class="icono-grande">🌳</div>
+    <h3>No hay contextos registrados</h3>
+    <p>Cree contextos desde el panel de administración para comenzar a organizar las rutas.</p>
+    <a href="{% url 'vista_acerca' %}" class="btn btn-primary" style="margin-top: 1rem;">Más información</a>
+</div>
+{% endif %}
+{% endblock %}

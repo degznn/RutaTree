@@ -1,0 +1,48 @@
+{% extends 'app_arbol/base.html' %}
+{% block titulo %}Buscar{% endblock %}
+{% block contenido %}
+<div class="page-heading">
+    <h1>Buscar nodos</h1>
+    <p>Encuentre nodos por nombre o descripcion en todos los contextos.</p>
+</div>
+
+<form method="GET" action="{% url 'vista_buscar' %}" style="display: flex; gap: 0.8rem; margin-bottom: 2rem; max-width: 500px;">
+    <input type="text" name="q" value="{{ query }}" placeholder="Escriba su busqueda..." required style="flex: 1; padding: 0.6rem 0.8rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none;">
+    <button type="submit" class="btn btn-primary">Buscar</button>
+</form>
+
+{% if query %}
+    {% if resultados %}
+    <p style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.9rem;">
+        Se encontraron <strong>{{ resultados|length }}</strong> resultado{{ resultados|length|pluralize }} para "{{ query }}".
+    </p>
+    <div>
+        {% for nodo in resultados %}
+        <div class="resultado-item">
+            <div class="res-icono">{% if nodo.es_hoja %}&#x1F4C4;{% else %}&#x1F4C2;{% endif %}</div>
+            <div class="res-info">
+                <h4><a href="{% url 'vista_nodo' nodo.id %}">{{ nodo.nombre }}</a></h4>
+                <div class="res-contexto">{{ nodo.contexto.icono }} {{ nodo.contexto.nombre }} — Nivel {{ nodo.nivel }}</div>
+            </div>
+            <div class="res-acciones">
+                <a href="{% url 'vista_nodo' nodo.id %}" class="btn btn-outline btn-sm">Ver</a>
+                <a href="{% url 'vista_editar_nodo' nodo.id %}" class="btn btn-primary btn-sm">Editar</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="icono-grande">&#x1F50D;</div>
+        <h3>Sin resultados</h3>
+        <p>No se encontraron nodos que coincidan con "{{ query }}".</p>
+    </div>
+    {% endif %}
+{% else %}
+<div class="empty-state">
+    <div class="icono-grande">&#x1F50D;</div>
+    <h3>Realice una busqueda</h3>
+    <p>Ingrese un termino en el campo superior para buscar nodos en todos los contextos.</p>
+</div>
+{% endif %}
+{% endblock %}

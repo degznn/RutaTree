@@ -1,0 +1,83 @@
+{% extends 'app_arbol/base.html' %}
+{% block titulo %}{{ nodo.nombre }}{% endblock %}
+{% block contenido %}
+<div class="breadcrumb">
+    <a href="{% url 'vista_index' %}">Inicio</a>
+    <span class="separador">/</span>
+    <a href="{% url 'vista_contextos' %}">Contextos</a>
+    <span class="separador">/</span>
+    <a href="{% url 'vista_arbol' nodo.contexto.id %}">{{ nodo.contexto.nombre }}</a>
+    <span class="separador">/</span>
+    <span class="actual">{{ nodo.nombre }}</span>
+</div>
+
+{% if ancestros %}
+<div class="alert alert-info">
+    <strong>Ruta:</strong>
+    {% for ancestro in ancestros %}
+    <a href="{% url 'vista_nodo' ancestro.id %}">{{ ancestro.nombre }}</a>
+    {% if not forloop.last %} → {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="page-heading">
+    <h1>{% if nodo.es_hoja %}&#x1F4C4;{% else %}&#x1F4C2;{% endif %} {{ nodo.nombre }}</h1>
+    <div class="acciones">
+        <a href="{% url 'vista_crear_nodo' %}?contexto={{ nodo.contexto.id }}&padre={{ nodo.id }}" class="btn btn-success btn-sm">+ Agregar hijo</a>
+        <a href="{% url 'vista_editar_nodo' nodo.id %}" class="btn btn-primary btn-sm">Editar</a>
+        <a href="{% url 'vista_eliminar_nodo' nodo.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+    </div>
+</div>
+
+<div class="detalle-card">
+    <div class="campo">
+        <div class="campo-label">Nombre</div>
+        <div class="campo-valor text-large">{{ nodo.nombre }}</div>
+    </div>
+    <div class="campo">
+        <div class="campo-label">Descripcion</div>
+        <div class="campo-valor">{{ nodo.descripcion|default:"Sin descripcion"|linebreaks }}</div>
+    </div>
+    <div class="campo">
+        <div class="campo-label">Contexto</div>
+        <div class="campo-valor">{{ nodo.contexto.icono }} {{ nodo.contexto.nombre }}</div>
+    </div>
+    <div class="campo">
+        <div class="campo-label">Nivel</div>
+        <div class="campo-valor">{{ nodo.nivel }}</div>
+    </div>
+    <div class="campo">
+        <div class="campo-label">Orden</div>
+        <div class="campo-valor">{{ nodo.orden }}</div>
+    </div>
+    <div class="campo">
+        <div class="campo-label">Tipo</div>
+        <div class="campo-valor">
+            {% if nodo.es_raiz %}
+            <span class="badge badge-warning">Raiz</span>
+            {% elif nodo.es_hoja %}
+            <span class="badge badge-success">Hoja</span>
+            {% else %}
+            <span class="badge badge-primary">Intermedio</span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% if hijos %}
+<h2 style="margin: 2rem 0 1rem; font-size: 1.2rem;">Hijos directos ({{ hijos|length }})</h2>
+<div class="card-grid">
+    {% for hijo in hijos %}
+    <div class="card">
+        <div class="card-icon">{% if hijo.es_hoja %}&#x1F4C4;{% else %}&#x1F4C2;{% endif %}</div>
+        <h3><a href="{% url 'vista_nodo' hijo.id %}">{{ hijo.nombre }}</a></h3>
+        <p>{{ hijo.descripcion|default:"Sin descripcion"|truncatechars:80 }}</p>
+        <div class="card-meta">
+            <span>Nivel {{ hijo.nivel }}</span>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

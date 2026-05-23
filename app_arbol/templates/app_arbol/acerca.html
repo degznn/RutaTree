@@ -1,0 +1,65 @@
+{% extends 'app_arbol/base.html' %}
+{% block titulo %}Acerca de{% endblock %}
+{% block contenido %}
+<div class="page-heading">
+    <h1>Acerca de la aplicacion</h1>
+    <p>Informacion sobre el Gestor de Rutas Jerarquicas.</p>
+</div>
+
+<div class="acerca-grid">
+    <div class="acerca-card">
+        <h2>&#x1F331; Gestor de Rutas</h2>
+        <div class="version">v1.0.0</div>
+        <p style="color: var(--text-secondary);">Aplicacion para organizar rutas jerarquicas de atencion o gestion dentro de una institucion. Permite modelar diferentes contextos mediante un arbol generico con nodos padre e hijo.</p>
+
+        <div class="funcionalidad">
+            <h4>&#x1F4A1; Funcionalidades</h4>
+            <ul>
+                <li>Arbol generico con niveles jerarquicos</li>
+                <li>Multiples contextos de atencion</li>
+                <li>Visualizacion de arbol completo</li>
+                <li>Navegacion por ruta de ancestros</li>
+                <li>Busqueda de nodos por nombre o descripcion</li>
+                <li>Creacion, edicion y eliminacion de nodos</li>
+            </ul>
+        </div>
+
+        <div class="funcionalidad">
+            <h4>&#x1F4F7; Tecnologia</h4>
+            <ul>
+                <li>Django 4.2 (Python)</li>
+                <li>SQLite como base de datos</li>
+                <li>HTML5 + CSS3 minimalista</li>
+                <li>Modelo MVC (Modelo-Vista-Controlador)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div>
+        <div class="acerca-card" style="margin-bottom: 1.5rem;">
+            <h3>&#x1F3E8; Contextos incluidos</h3>
+            <ul style="list-style: none; margin-top: 1rem;">
+                <li style="padding: 0.4rem 0; border-bottom: 1px solid var(--border);">&bull; Soporte tecnico</li>
+                <li style="padding: 0.4rem 0; border-bottom: 1px solid var(--border);">&bull; Tramites administrativos</li>
+                <li style="padding: 0.4rem 0; border-bottom: 1px solid var(--border);">&bull; Reclamos</li>
+                <li style="padding: 0.4rem 0; border-bottom: 1px solid var(--border);">&bull; Atencion academica</li>
+                <li style="padding: 0.4rem 0; border-bottom: 1px solid var(--border);">&bull; Orientacion al estudiante</li>
+                <li style="padding: 0.4rem 0; border-bottom: 1px solid var(--border);">&bull; Gestion de areas internas</li>
+                <li style="padding: 0.4rem 0;">&bull; Clasificacion de servicios</li>
+            </ul>
+        </div>
+
+        <div class="acerca-card">
+            <h3>&#x1F4A0; Logica de arbol generico</h3>
+            <p style="color: var(--text-secondary); margin-top: 0.5rem;">La aplicacion implementa un arbol generico donde cada nodo puede tener multiples hijos. Las operaciones incluyen:</p>
+            <ul style="list-style: none; margin-top: 1rem;">
+                <li style="padding: 0.3rem 0; color: var(--text-secondary); font-size: 0.9rem;">&bull; <strong>obtener_hijos</strong> — Hijos directos de un nodo</li>
+                <li style="padding: 0.3rem 0; color: var(--text-secondary); font-size: 0.9rem;">&bull; <strong>obtener_ancestros</strong> — Ruta desde la raiz al nodo</li>
+                <li style="padding: 0.3rem 0; color: var(--text-secondary); font-size: 0.9rem;">&bull; <strong>obtener_descendientes</strong> — Todos los nodos debajo de uno dado</li>
+                <li style="padding: 0.3rem 0; color: var(--text-secondary); font-size: 0.9rem;">&bull; <strong>construir_arbol</strong> — Arbol completo de un contexto</li>
+                <li style="padding: 0.3rem 0; color: var(--text-secondary); font-size: 0.9rem;">&bull; <strong>es_hoja</strong> — Verifica si un nodo es terminal</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

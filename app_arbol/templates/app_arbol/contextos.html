@@ -1,0 +1,34 @@
+{% extends 'app_arbol/base.html' %}
+{% block titulo %}Contextos{% endblock %}
+{% block contenido %}
+<div class="page-heading">
+    <h1>Contextos de atención</h1>
+    <p>Cada contexto representa un área o categoría dentro de la institución. Explore sus árboles jerárquicos.</p>
+</div>
+
+{% if contextos %}
+<div class="contexto-list">
+    {% for contexto in contextos %}
+    <div class="contexto-item">
+        <div class="ctx-icono">{{ contexto.icono }}</div>
+        <div class="ctx-info">
+            <h3><a href="{% url 'vista_arbol' contexto.id %}">{{ contexto.nombre }}</a></h3>
+            <p>{{ contexto.descripcion|default:"Sin descripción" }}</p>
+        </div>
+        <div class="ctx-meta">
+            <span class="badge badge-primary">{{ contexto.cantidad_nodos }} nodos</span>
+        </div>
+        <div>
+            <a href="{% url 'vista_arbol' contexto.id %}" class="btn btn-primary btn-sm">Ver árbol</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <div class="icono-grande">📋</div>
+    <h3>No hay contextos registrados</h3>
+    <p>Agregue contextos desde el panel de administración de Django.</p>
+</div>
+{% endif %}
+{% endblock %}

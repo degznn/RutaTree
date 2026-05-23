@@ -1,0 +1,63 @@
+{% extends 'app_arbol/base.html' %}
+{% block titulo %}Eliminar {{ nodo.nombre }}{% endblock %}
+{% block contenido %}
+<div class="breadcrumb">
+    <a href="{% url 'vista_index' %}">Inicio</a>
+    <span class="separador">/</span>
+    <a href="{% url 'vista_contextos' %}">Contextos</a>
+    <span class="separador">/</span>
+    <a href="{% url 'vista_arbol' nodo.contexto.id %}">{{ nodo.contexto.nombre }}</a>
+    <span class="separador">/</span>
+    <a href="{% url 'vista_nodo' nodo.id %}">{{ nodo.nombre }}</a>
+    <span class="separador">/</span>
+    <span class="actual">Eliminar</span>
+</div>
+
+<div class="form-card" style="border: 1px solid var(--error);">
+    <div class="alert alert-danger">
+        <strong>&#x26A0; Atencion:</strong> Esta a punto de eliminar este nodo y todos sus descendientes.
+    </div>
+
+    <div class="page-heading">
+        <h1>Eliminar nodo</h1>
+        <p>Confirme la eliminacion de <strong>{{ nodo.nombre }}</strong>.</p>
+    </div>
+
+    <div class="detalle-card" style="box-shadow: none; padding: 0; margin-bottom: 1rem;">
+        <div class="campo">
+            <div class="campo-label">Nombre</div>
+            <div class="campo-valor">{{ nodo.nombre }}</div>
+        </div>
+        <div class="campo">
+            <div class="campo-label">Contexto</div>
+            <div class="campo-valor">{{ nodo.contexto.nombre }}</div>
+        </div>
+        <div class="campo">
+            <div class="campo-label">Nivel</div>
+            <div class="campo-valor">{{ nodo.nivel }}</div>
+        </div>
+    </div>
+
+    {% if descendientes %}
+    <div class="alert alert-warning">
+        <strong>Nodos afectados:</strong> Se eliminaran {{ descendientes|length }} descendiente{{ descendientes|pluralize }} ademas de este nodo.
+    </div>
+    <ul style="margin: 0.5rem 0 1rem 1.5rem; font-size: 0.9rem; color: var(--text-secondary);">
+        {% for d in descendientes|slice:":10" %}
+        <li>{{ d.nombre }}</li>
+        {% endfor %}
+        {% if descendientes|length > 10 %}
+        <li>... y {{ descendientes|length|add:"-10" }} mas</li>
+        {% endif %}
+    </ul>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-acciones">
+            <button type="submit" class="btn btn-danger">Si, eliminar nodo</button>
+            <a href="{% url 'vista_nodo' nodo.id %}" class="btn btn-outline">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

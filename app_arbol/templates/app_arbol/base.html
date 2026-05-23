@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Gestor de Árbol{% endblock %} — Gestor de Rutas</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'app_arbol/css/estilo.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{% url 'vista_index' %}" class="logo">🌳 Gestor de Rutas</a>
+            <ul class="nav-links">
+                <li><a href="{% url 'vista_index' %}">Inicio</a></li>
+                <li><a href="{% url 'vista_contextos' %}">Contextos</a></li>
+                <li><a href="{% url 'vista_crear_nodo' %}">Nuevo Nodo</a></li>
+                <li><a href="{% url 'vista_acerca' %}">Acerca</a></li>
+            </ul>
+            <form class="search-form" action="{% url 'vista_buscar' %}" method="GET">
+                <input type="text" name="q" placeholder="Buscar nodos..." value="{{ query|default:'' }}" required>
+                <button type="submit">Buscar</button>
+            </form>
+        </nav>
+    </header>
+    <main>
+        {% block contenido %}{% endblock %}
+    </main>
+    <footer>
+        <p>Gestor de Rutas Jerárquicas &copy; 2026 — Aplicación de organización institucional</p>
+    </footer>
+</body>
+</html>

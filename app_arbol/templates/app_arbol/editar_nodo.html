@@ -1,0 +1,57 @@
+{% extends 'app_arbol/base.html' %}
+{% block titulo %}Editar {{ nodo.nombre }}{% endblock %}
+{% block contenido %}
+<div class="breadcrumb">
+    <a href="{% url 'vista_index' %}">Inicio</a>
+    <span class="separador">/</span>
+    <a href="{% url 'vista_contextos' %}">Contextos</a>
+    <span class="separador">/</span>
+    <a href="{% url 'vista_arbol' nodo.contexto.id %}">{{ nodo.contexto.nombre }}</a>
+    <span class="separador">/</span>
+    <a href="{% url 'vista_nodo' nodo.id %}">{{ nodo.nombre }}</a>
+    <span class="separador">/</span>
+    <span class="actual">Editar</span>
+</div>
+
+<div class="page-heading">
+    <h1>Editar nodo</h1>
+    <p>Modifique los datos del nodo <strong>{{ nodo.nombre }}</strong>.</p>
+</div>
+
+<div class="form-card">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-grupo">
+            <label for="nombre">Nombre</label>
+            <input type="text" name="nombre" id="nombre" value="{{ nodo.nombre }}" required>
+        </div>
+
+        <div class="form-grupo">
+            <label for="descripcion">Descripcion</label>
+            <textarea name="descripcion" id="descripcion">{{ nodo.descripcion }}</textarea>
+        </div>
+
+        <div class="form-grupo">
+            <label for="padre">Nodo padre</label>
+            <select name="padre" id="padre">
+                <option value="">— Es nodo raiz —</option>
+                {% for n in nodos_mismo_contexto %}
+                <option value="{{ n.id }}" {% if nodo.padre and n.id == nodo.padre.id %}selected{% endif %}>
+                    {{ n.nombre }} (nivel {{ n.nivel }})
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-grupo">
+            <label for="orden">Orden</label>
+            <input type="number" name="orden" id="orden" value="{{ nodo.orden }}" min="0">
+        </div>
+
+        <div class="form-acciones">
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            <a href="{% url 'vista_nodo' nodo.id %}" class="btn btn-outline">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
